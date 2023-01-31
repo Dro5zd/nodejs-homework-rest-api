@@ -1,4 +1,5 @@
 const {Contact} = require('../service/schemas/contact');
+const RequestError = require('../helpers/RequestError');
 
 const get = async (req, res, next) => {
   try {
@@ -14,16 +15,10 @@ const getById = async (req, res, next) => {
   const {contactId} = req.params;
   try {
     const result = await Contact.findById(contactId);
-    if (result) {
-      res.json(result);
-    } else {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${contactId}`,
-        data: 'Not Found',
-      });
+    if (!result) {
+      throw RequestError(404, 'Not found');
     }
+    res.status(200).json(result);
   } catch (e) {
     console.error(e);
     next(e);
@@ -45,16 +40,10 @@ const update = async (req, res, next) => {
   const {contactId} = req.params;
   try {
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
-    if (result) {
-      res.status(201).json(result);
-    } else {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${contactId}`,
-        data: 'Not Found',
-      });
+    if (!result) {
+      throw RequestError(404, 'Not found');
     }
+    res.status(201).json(result);
   } catch (e) {
     console.error(e);
     next(e);
@@ -64,20 +53,14 @@ const update = async (req, res, next) => {
 const updateStatusContact = async (req, res, next) => {
   const {contactId} = req.params;
   try {
-    if (!req.body) {
-      res.status(400).json({message: 'missing field favorite'});
-    }
+    // if (!req.body) {
+    //   res.status(400).json({message: 'missing field favorite'});
+    // }
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
-    if (result) {
-      res.status(200).json(result);
-    } else {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${contactId}`,
-        data: 'Not Found',
-      });
+    if (!result) {
+      throw RequestError(404, 'Not found');
     }
+    res.status(200).json(result);
   } catch (e) {
     console.error(e);
     next(e);
@@ -88,16 +71,10 @@ const remove = async (req, res, next) => {
   const {contactId} = req.params;
   try {
     const result = await Contact.findByIdAndRemove(contactId);
-    if (result) {
-      res.json({message: 'Delete success'});
-    } else {
-      res.status(404).json({
-        status: 'error',
-        code: 404,
-        message: `Not found contact id: ${contactId}`,
-        data: 'Not Found',
-      });
+    if (!result) {
+      throw RequestError(404, 'Not found');
     }
+    res.json({message: 'Delete success'});
   } catch (e) {
     console.error(e);
     next(e);

@@ -20,23 +20,13 @@ app.use(cors());
 const contactsRouter = require('./routes/api/contacts');
 app.use('/api/contacts', contactsRouter);
 
-app.use((_, res, __) => {
-  res.status(404).json({
-    status: 'error',
-    code: 404,
-    message: 'Use api on routes: /api/contacts',
-    data: 'Not found',
-  });
+app.use((req, res) => {
+  res.status(404).json({message: 'Not found'});
 });
 
-app.use((err, _, res, __) => {
-  console.log(err.stack);
-  res.status(500).json({
-    status: 'fail',
-    code: 500,
-    message: err.message,
-    data: 'Internal Server Error',
-  });
+app.use((err, req, res, next) => {
+  const {status = 500, message = 'Server error'} = err;
+  res.status(status).json({message});
 });
 
 const{DB_HOST, PORT = 3000} = process.env
