@@ -1,5 +1,48 @@
 const {Contact} = require('../service/schemas/contact');
+const {User} = require('../service/schemas/user');
+const bcrypt = require('bcryptjs');
 const RequestError = require('../helpers/RequestError');
+
+const register = async (req, res, next) => {
+  const {email, password} = req.body;
+  try {
+    const user = await User.findOne({email});
+    if (user) {
+      throw RequestError(409, 'Email in use');
+    }
+    const hashPassword = await bcrypt.hash(password, 10);
+    const result = await User.create({email, password: hashPassword});
+    res.status(201).json({email: result.email, subscription: result.subscription});
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
+
+const login = async (req, res, next) => {
+  const {email, password} = req.body;
+  try {
+    const user = await User.findOne({email});
+    if (!user) {
+      throw RequestError(401, 'Email or password is wrong');
+    }
+    const passwordCompare = await bcrypt.compare(password, user.password);
+    if (!passwordCompare) {
+      throw RequestError(401, 'Email or password is wrong');
+    }
+    const token = 'iuybfekfegjnb.wefwhfekjhfh';
+    res.status(200).json({
+      token,
+      user: {
+        email: user.email,
+        subscription: user.subscription
+      }
+    });
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+};
 
 const get = async (req, res, next) => {
   try {
@@ -53,9 +96,6 @@ const update = async (req, res, next) => {
 const updateStatusContact = async (req, res, next) => {
   const {contactId} = req.params;
   try {
-    // if (!req.body) {
-    //   res.status(400).json({message: 'missing field favorite'});
-    // }
     const result = await Contact.findByIdAndUpdate(contactId, req.body, {new: true});
     if (!result) {
       throw RequestError(404, 'Not found');
@@ -82,6 +122,8 @@ const remove = async (req, res, next) => {
 };
 
 module.exports = {
+  register,
+  login,
   get,
   getById,
   create,
