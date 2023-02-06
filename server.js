@@ -21,7 +21,7 @@ const authRouter = require('./routes/api/user');
 const contactsRouter = require('./routes/api/contacts');
 
 
-app.use('/api/users', authRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/contacts', contactsRouter);
 
 app.use((req, res) => {

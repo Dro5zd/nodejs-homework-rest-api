@@ -1,4 +1,4 @@
-const {Schema, model, SchemaTypes} = require('mongoose');
+const {Schema, model} = require('mongoose');
 
 const Joi = require('joi');
 
@@ -22,10 +22,9 @@ const userSchema = new Schema(
       enum: ['starter', 'pro', 'business'],
       default: 'starter'
     },
-    token: String,
-    owner: {
-      type: SchemaTypes.ObjectId,
-      ref: 'user',
+    token: {
+      type: String,
+      default: ''
     }
   },
   {versionKey: false, timestamps: true}

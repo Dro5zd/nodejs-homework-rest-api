@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const ctrlUser = require('../../controller');
+const ctrl = require('../../controllers/auth');
 const {validateBody} = require('../../middlewares')
 const {schemas} = require('../../service/schemas/user')
 
-router.post('/register',validateBody(schemas.registerSchema), ctrlUser.register);
+const {ctrlWrapper} = require("../../helpers")
 
-router.post('/login',validateBody(schemas.loginSchema), ctrlUser.login);
+router.post('/users/register',validateBody(schemas.registerSchema), ctrlWrapper(ctrl.register));
+
+router.post('/users/login',validateBody(schemas.loginSchema), ctrlWrapper(ctrl.login));
 
 module.exports = router;
