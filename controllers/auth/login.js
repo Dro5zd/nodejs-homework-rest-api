@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 
 const {SECRET_KEY} = process.env
-const login = async (req, res, next) => {
+const login = async (req, res) => {
   const {email, password} = req.body;
     const user = await User.findOne({email});
     if (!user) {
