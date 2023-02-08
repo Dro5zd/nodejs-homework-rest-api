@@ -12,7 +12,7 @@ router.post('/users/login', validateBody(schemas.loginSchema), ctrlWrapper(ctrl.
 
 router.get('/users/logout', authenticate, ctrlWrapper(ctrl.logout));
 
+router.get('/users/current', authenticate, ctrlWrapper(ctrl.current));
+
 module.exports = router;
 
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZTBkZWJjYzEyYjE5ODU3YzY1MWQ2ZCIsImlhdCI6MTY3NTY4MTY1MSwiZXhwIjoxNjc1NzY4MDUxfQ.5VX6dxLGN7W6ETMG8TOcGceEByFwayrNX2BNxGxNmbI

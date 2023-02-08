@@ -1,6 +1,6 @@
 const getAll = require('./getAll');
 const getById = require('./getById');
-const create = require('./create');
+const createContact = require('./createContact');
 const remove = require('./remove');
 const update = require('./update');
 const updateStatusContact = require('./updateStatusContact');
@@ -8,7 +8,7 @@ const updateStatusContact = require('./updateStatusContact');
 module.exports = {
   getAll,
   getById,
-  create,
+  createContact,
   remove,
   update,
   updateStatusContact
